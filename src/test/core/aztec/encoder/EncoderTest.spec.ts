@@ -167,11 +167,11 @@ describe('EncoderTest', () => {
     );
     const expectedMatrix: BitMatrix = aztec.getMatrix();
     // TYPESCRIPTPORT: here we have to compare each property
-    // since assertEquals would strictly compare two different
+    // since console.assert would strictly compare two different
     // objects with same values and fail
-    assertEquals(matrix.getHeight(), expectedMatrix.getHeight());
-    assertEquals(matrix.getRowSize(), expectedMatrix.getRowSize());
-    assertEquals(matrix.getWidth(), expectedMatrix.getWidth());
+    console.assert(matrix.getHeight().toString(), expectedMatrix.getHeight().toString());
+    console.assert(matrix.getRowSize().toString(), expectedMatrix.getRowSize().toString());
+    console.assert(matrix.getWidth().toString(), expectedMatrix.getWidth().toString());
     // since bits is private we have to access it this way
     assertArrayEquals(matrix['bits'], expectedMatrix['bits']);
   });
@@ -476,7 +476,7 @@ describe('EncoderTest', () => {
         8 * i + (i <= 31 ? 10 : i <= 62 ? 20 : i <= 2078 ? 21 : 31);
       // Verify that we are correct about the length.
       testHighLevelEncodeString(sb.substring(0, i), expectedLength);
-      if (i != 1 && i != 32 && i != 2079) {
+      if (i !== 1 && i !== 32 && i !== 2079) {
         // The addition of an 'a' at the beginning or end gets merged into the binary code
         // in those cases where adding another binary character only adds 8 or 9 bits to the result.
         // So we exclude the border cases i=1,32,2079
@@ -565,11 +565,11 @@ describe('EncoderTest', () => {
       ZXingStandardCharsets.ISO_8859_1
     );
     let aztec = AztecEncoder.encode(alphabet, 25, -2);
-    assertEquals(2, aztec.getLayers());
+    console.assert(2, aztec.getLayers().toString());
     assertTrue(aztec.isCompact());
 
     aztec = AztecEncoder.encode(alphabet, 25, 32);
-    assertEquals(32, aztec.getLayers());
+    console.assert(32, aztec.getLayers().toString());
     assertFalse(aztec.isCompact());
 
     try {
@@ -613,7 +613,7 @@ describe('EncoderTest', () => {
       AztecEncoder.DEFAULT_AZTEC_LAYERS
     );
     assertFalse(aztecCode.isCompact());
-    assertEquals(4, aztecCode.getLayers());
+    console.assert(4, aztecCode.getLayers().toString());
 
     // But shortening the string to 100 bytes (500 bits of data), compact works fine, even if we
     // include more error checking.
@@ -626,7 +626,7 @@ describe('EncoderTest', () => {
       AztecEncoder.DEFAULT_AZTEC_LAYERS
     );
     assertTrue(aztecCode.isCompact());
-    assertEquals(4, aztecCode.getLayers());
+    console.assert(4, aztecCode.getLayers().toString());
   });
 
   // Helper routines
@@ -642,10 +642,10 @@ describe('EncoderTest', () => {
       33,
       AztecEncoder.DEFAULT_AZTEC_LAYERS
     );
-    assertEquals(compact, aztec.isCompact());
-    assertEquals(layers, aztec.getLayers());
+    console.assert(compact, aztec.isCompact());
+    console.assert(layers, aztec.getLayers().toString());
     const matrix: BitMatrix = aztec.getMatrix();
-    assertEquals(expected, matrix.toString());
+    console.assert(expected, matrix.toString());
   }
 
   function testEncodeDecode(data: string, compact: boolean, layers: number) {
@@ -654,8 +654,8 @@ describe('EncoderTest', () => {
       25,
       AztecEncoder.DEFAULT_AZTEC_LAYERS
     );
-    assertEquals(compact, aztec.isCompact());
-    assertEquals(layers, aztec.getLayers());
+    console.assert(compact, aztec.isCompact());
+    console.assert(layers, aztec.getLayers().toString());
     const matrix = aztec.getMatrix();
     let r: AztecDetectorResult = new AztecDetectorResult(
       matrix,
@@ -665,7 +665,7 @@ describe('EncoderTest', () => {
       aztec.getLayers()
     );
     let res: DecoderResult = new AztecDecoder().decode(r);
-    assertEquals(data, res.getText());
+    console.assert(data, res.getText());
     // Check error correction by introducing a few minor errors
     const random = getPseudoRandom();
     matrix.flip(random.nextInt(matrix.getWidth()), random.nextInt(2));
@@ -686,7 +686,7 @@ describe('EncoderTest', () => {
       aztec.getLayers()
     );
     res = new AztecDecoder().decode(r);
-    assertEquals(data, res.getText());
+    console.assert(data, res.getText());
   }
 
   function testWriter(
@@ -718,10 +718,10 @@ describe('EncoderTest', () => {
       eccPercent,
       AztecEncoder.DEFAULT_AZTEC_LAYERS
     );
-    assertEquals(compact, aztec.isCompact());
-    assertEquals(layers, aztec.getLayers());
+    console.assert(compact, aztec.isCompact());
+    console.assert(layers, aztec.getLayers().toString());
     const matrix2 = aztec.getMatrix();
-    assertEquals(matrix.toString(), matrix2.toString());
+    console.assert(matrix.toString(), matrix2.toString());
     let r = new AztecDetectorResult(
       matrix,
       NO_POINTS,
@@ -730,7 +730,7 @@ describe('EncoderTest', () => {
       aztec.getLayers()
     );
     let res = new AztecDecoder().decode(r);
-    assertEquals(expectedData, res.getText());
+    console.assert(expectedData, res.getText());
     // Check error correction by introducing up to eccPercent/2 errors
     const ecWords = (aztec.getCodeWords() * eccPercent) / 100 / 2;
     const random = getPseudoRandom();
@@ -752,7 +752,7 @@ describe('EncoderTest', () => {
       aztec.getLayers()
     );
     res = new AztecDecoder().decode(r);
-    assertEquals(expectedData, res.getText());
+    console.assert(expectedData, res.getText());
   }
 
   function getPseudoRandom() {
@@ -766,13 +766,13 @@ describe('EncoderTest', () => {
     expected: string
   ) {
     const inArr: BitArray = AztecEncoder.generateModeMessage(compact, layers, words);
-    assertEquals(stripSpace(expected), stripSpace(inArr.toString()));
+    console.assert(stripSpace(expected), stripSpace(inArr.toString()));
   }
 
   function testStuffBits(wordSize: number, bits: string, expected: string) {
     const inArr = toBitArray(bits);
     const stuffed: BitArray = AztecEncoder.stuffBits(inArr, wordSize);
-    assertEquals(stripSpace(expected), stripSpace(stuffed.toString()));
+    console.assert(stripSpace(expected), stripSpace(stuffed.toString()));
   }
 
   function toBitArray(bits: string): BitArray {
@@ -799,21 +799,21 @@ describe('EncoderTest', () => {
 
     if (typeof expectedBits === 'number') {
       const receivedBitCount: number = stripSpace(bits.toString()).length;
-      assertEquals(receivedBitCount, expectedBits);
-      assertEquals(AztecDecoder.highLevelDecode(toBooleanArray(bits)), s);
+      console.assert(receivedBitCount, expectedBits.toString());
+      console.assert(AztecDecoder.highLevelDecode(toBooleanArray(bits)), s);
     } else {
       const receivedBits: string = stripSpace(bits.toString());
-      assertEquals(receivedBits, stripSpace(expectedBits));
-      assertEquals(AztecDecoder.highLevelDecode(toBooleanArray(bits)), s);
+      console.assert(receivedBits, stripSpace(expectedBits));
+      console.assert(AztecDecoder.highLevelDecode(toBooleanArray(bits)), s);
     }
   }
 
   /*   function testHighLevelEncodeString(s: string, expectedReceivedBits: number) {
     const bits: BitArray = new AztecHighLevelEncoder(StringUtils.getBytes(s, ZXingStandardCharsets.ISO_8859_1)).encode();
     const receivedBitCount: number = stripSpace(bits.toString()).length;
-    assertEquals("highLevelEncode() failed for input string: " + s,
+    console.assert("highLevelEncode() failed for input string: " + s,
                  expectedReceivedBits, receivedBitCount);
-    assertEquals(s, AztecDecoder.highLevelDecode(toBooleanArray(bits)));
+    console.assert(s, AztecDecoder.highLevelDecode(toBooleanArray(bits)));
   } */
 
   function stripSpace(s: string): string {

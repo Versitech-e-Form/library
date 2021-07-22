@@ -143,7 +143,7 @@ abstract class AbstractBlackBoxSpec {
    * @throws IOException
    */
   protected getImageFiles(): Array<string> {
-    assertEquals(fs.existsSync(this.testBase), true, 'Please download and install test images, and run from the \'core\' directory');
+    console.assert(fs.existsSync(this.testBase), 'Please download and install test images, and run from the \'core\' directory');
     return this.walkDirectory(this.testBase);
   }
 
@@ -173,7 +173,7 @@ abstract class AbstractBlackBoxSpec {
    * @throws IOException
    */
   private async testBlackBoxCountingResults(assertOnFailure: boolean): Promise<void> {
-    assertEquals(this.testResults.length > 0, true);
+    console.assert(this.testResults.length > 0);
 
     const imageFiles: Array<string> = this.getImageFiles();
     const testCount: number /*int*/ = this.testResults.length;
@@ -200,7 +200,7 @@ abstract class AbstractBlackBoxSpec {
           expectedText = AbstractBlackBoxSpec.readTextFileAsString(expectedTextFile);
         } else {
           expectedTextFile = path.resolve(this.testBase, fileBaseName + '.bin');
-          assertEquals(fs.existsSync(expectedTextFile), true, 'result bin/text file should exists');
+          console.assert(fs.existsSync(expectedTextFile), 'result bin/text file should exists');
           expectedText = AbstractBlackBoxSpec.readBinFileAsString(expectedTextFile);
         }
 
@@ -298,10 +298,10 @@ abstract class AbstractBlackBoxSpec {
         const testResult = this.testResults[x];
         const label = '      Rotation ' + testResult.getRotation() + ' degrees: Too many images failed.';
 
-        assertEquals(passedCounts[x] >= testResult.getMustPassCount(), true, label);
-        assertEquals(tryHarderCounts[x] >= testResult.getTryHarderCount(), true, `Try harder, ${label}`);
-        assertEquals(misreadCounts[x] <= testResult.getMaxMisreads(), true, label);
-        assertEquals(tryHarderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads(), true, `Try harder, ${label}`);
+        console.assert(passedCounts[x] >= testResult.getMustPassCount(), label);
+        console.assert(tryHarderCounts[x] >= testResult.getTryHarderCount(), `Try harder, ${label}`);
+        console.assert(misreadCounts[x] <= testResult.getMaxMisreads(), label);
+        console.assert(tryHarderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads(), `Try harder, ${label}`);
       }
     }
   }
