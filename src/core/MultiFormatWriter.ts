@@ -27,13 +27,14 @@ import BitMatrix from './common/BitMatrix';
 // import ITFWriter from './oned/ITFWriter'
 // import UPCAWriter from './oned/UPCAWriter'
 // import UPCEWriter from './oned/UPCEWriter'
-// import PDF417Writer from './pdf417/PDF417Writer'
+import PDF417Writer from './pdf417/PDF417Writer';
 import QRCodeWriter from './qrcode/QRCodeWriter';
 import Writer from './Writer';
 import BarcodeFormat from './BarcodeFormat';
 import EncodeHintType from './EncodeHintType';
 
 import IllegalArgumentException from './IllegalArgumentException';
+import Code39Writer from './oned/Code39Writer';
 
 /*import java.util.Map;*/
 
@@ -76,9 +77,9 @@ export default class MultiFormatWriter implements Writer {
             case BarcodeFormat.QR_CODE:
                 writer = new QRCodeWriter();
                 break;
-            // case BarcodeFormat.CODE_39:
-            //   writer = new Code39Writer()
-            //   break
+            case BarcodeFormat.CODE_39:
+              writer = new Code39Writer();
+              break;
             // case BarcodeFormat.CODE_93:
             //   writer = new Code93Writer()
             //   break
@@ -88,9 +89,9 @@ export default class MultiFormatWriter implements Writer {
             // case BarcodeFormat.ITF:
             //   writer = new ITFWriter()
             //   break
-            // case BarcodeFormat.PDF_417:
-            //   writer = new PDF417Writer()
-            //   break
+            case BarcodeFormat.PDF_417:
+              writer = new PDF417Writer();
+              break;
             // case BarcodeFormat.CODABAR:
             //   writer = new CodaBarWriter()
             //   break

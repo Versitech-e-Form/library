@@ -47,7 +47,7 @@ it('ExpandedInformationDecoderTest', () => {
 
     let decoder: AbstractExpandedDecoder = createAbstractExpandedDecoder(information);
     let decoded: String = decoder.parseInformation();
-    assertEquals('(10)12A', decoded);
+    console.assert('(10)12A', decoded.toString());
   });
 
 });

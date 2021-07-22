@@ -82,11 +82,11 @@ const SPACE: RegExp = /\s/;
 
 function check(data: string): void {
   const binary: BitArray = BinaryUtil.buildBitArrayFromString(data);
-  assertEquals(data, binary.toString());
+  console.assert(data, binary.toString());
 }
 
 function checkWithoutSpaces(data: string): void {
   const dataWithoutSpaces: string = data.replace(SPACE, '');
   const binary: BitArray = BinaryUtil.buildBitArrayFromStringWithoutSpaces(dataWithoutSpaces);
-  assertEquals(data, binary.toString());
+  console.assert(data, binary.toString());
 }
